@@ -1,12 +1,12 @@
 {
   "name": "دبّرها الأردن",
   "short_name": "دبّرها",
-  "description": "عروض ومطاعم وكافيهات وخدمات محلية في الأردن",
+  "description": "عروض ومحلات وخدمات محلية في الأردن",
   "lang": "ar-JO",
   "dir": "rtl",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f7f8f3",
-  "theme_color": "#0f766e",
+  "background_color": "#f7f8f2",
+  "theme_color": "#126b55",
   "icons": []
 }
