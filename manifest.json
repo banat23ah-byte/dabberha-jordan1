@@ -1,12 +1,11 @@
 {
   "name": "دبّرها الأردن",
   "short_name": "دبّرها",
-  "description": "عروض ومحلات وخدمات محلية في الأردن",
-  "lang": "ar-JO",
+  "lang": "ar",
   "dir": "rtl",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#f7f8f2",
-  "theme_color": "#126b55",
-  "icons": []
+  "background_color": "#fbfaf6",
+  "theme_color": "#0f766e",
+  "description": "دليل تجريبي للعروض والخدمات المحلية في الأردن."
 }
