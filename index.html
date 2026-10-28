@@ -4,92 +4,78 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0f766e">
-  <meta name="description" content="دبّرها الأردن - اكتشف عروض ومحلات وخدمات محلية في الأردن.">
-  <title>دبّرها الأردن | وفّرها بذكاء</title>
+  <meta name="description" content="دبّرها الأردن — اكتشف مطاعم وكافيهات وخدمات وعروض في الأردن.">
+  <title>دبّرها الأردن | عروض ومحلات قريبة منك</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="announcement"><span>🇯🇴</span> دليلك المحلي للعروض والخدمات في الأردن <span class="announcement-tag">نسخة تجريبية</span></div>
-  <header class="site-header">
-    <a class="brand" href="#" aria-label="دبّرها الأردن - الرئيسية">
-      <span class="brand-icon">د</span>
-      <span class="brand-text"><strong>دبّرها</strong><small>الأردن</small></span>
-    </a>
-    <nav class="desktop-nav" aria-label="التنقل">
-      <a href="#discover">اكتشف</a><a href="#categories">التصنيفات</a><a href="#business">لأصحاب المحلات</a>
-    </nav>
-    <button id="addBtn" class="button button-primary header-button" type="button">＋ أضف إعلانك</button>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="دبّرها الأردن - الرئيسية"><span class="brand-icon">د</span><span>دبّرها <b>الأردن</b></span></a>
+    <nav><a href="#places">اكتشف الأماكن</a><a href="#how">كيف نعمل؟</a><a class="nav-cta" href="#add-listing">أضف عرضك</a></nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <div class="pill"><span class="pulse"></span> كل الأردن بين إيديك</div>
-        <h1>اللقطة الحلوة؟<br><span>بتلاقيها هون.</span></h1>
-        <p>اكتشف مطاعم وكافيهات في عمّان، واتصل أو افتح صفحة النشاط بسهولة.</p>
-        <div class="hero-benefits"><span>✓ اكتشف محلي</span><span>✓ قارن بسهولة</span><span>✓ وفّر أكثر</span></div>
+        <span class="eyebrow">من الأردن، وللأردن 🇯🇴</span>
+        <h1>دبّرها…<br><em>وخليها أوفر!</em></h1>
+        <p>اكتشف مطاعم وكافيهات وخدمات في الأردن، وتواصل مع المكان مباشرة للاستفسار عن عروضه.</p>
+        <div class="hero-actions"><a class="button primary" href="#places">اكتشف الأماكن</a><a class="button light" href="#add-listing">أنت صاحب محل؟ أضف عرضك</a></div>
+        <div class="trust-note">📌 تأكد من العرض والسعر مع المحل قبل الزيارة.</div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-        <div class="art-card main-art-card"><span class="art-spark">✦</span><div class="art-emoji">🛍️</div><strong>لقطات بتستاهل</strong><small>كلها بمكان واحد</small></div>
-        <div class="floating-chip chip-top">🏷️ عروض محلية</div>
-        <div class="floating-chip chip-bottom">☕ قهوتك الجاية علينا؟</div>
-      </div>
-      <div class="search-panel">
-        <label class="search-input"><span>⌕</span><input id="searchInput" type="search" placeholder="شو بدك تلاقي اليوم؟" aria-label="ابحث عن عروض وخدمات"></label>
-        <label class="city-picker"><span>📍</span><select id="citySelect" aria-label="اختر المدينة"><option value="الكل">كل الأردن</option><option>عمّان</option><option>إربد</option><option>الزرقاء</option><option>العقبة</option><option>السلط</option><option>مادبا</option><option>جرش</option><option>الكرك</option></select></label>
-        <button class="button button-dark" id="searchBtn" type="button">ابحث الآن <span>←</span></button>
+      <div class="hero-card">
+        <div class="hero-card-top"><span>دليل محلي</span><span class="live-dot">● الأردن</span></div>
+        <div class="hero-emoji">☕ 🍽️ 🛍️</div>
+        <h2>الأماكن اللي بتهمّك</h2>
+        <p>اكتشف، تواصل، ودبّرها على قدّ ميزانيتك.</p>
+        <div class="mini-pills"><span>مطاعم</span><span>كافيهات</span><span>خدمات</span></div>
       </div>
     </section>
 
-    <section class="content-section" id="discover">
-      <div class="section-top">
-        <div><div class="eyebrow">على ذوقك وبالقرب منك</div><h2>اكتشف دبّرها <span class="title-dot">.</span></h2><p class="section-subtitle">اختار التصنيف، وخلّينا نساعدك تلاقي اللي بدك إياه.</p></div>
-        <span id="resultsCount" class="results-count"></span>
+    <section class="section" id="places">
+      <div class="section-heading"><div><span class="eyebrow">دليل عمّان — بداية الطريق</span><h2>مطاعم وكافيهات</h2><p>معلومات تعريفية للتواصل المباشر. لا تعني هذه القائمة وجود شراكة أو خصم مؤكد.</p></div></div>
+      <div class="filters" role="group" aria-label="تصفية الأماكن">
+        <button class="filter active" data-filter="all">الكل</button>
+        <button class="filter" data-filter="restaurant">مطاعم</button>
+        <button class="filter" data-filter="cafe">كافيهات</button>
       </div>
-      <div class="categories" id="categories" aria-label="التصنيفات">
-        <button class="category active" data-category="الكل"><span>✨</span> الكل</button>
-        <button class="category" data-category="عروض"><span>🏷️</span> عروض</button>
-        <button class="category" data-category="مطاعم"><span>🍔</span> مطاعم</button>
-        <button class="category" data-category="كافيهات"><span>☕</span> كافيهات</button>
-        <button class="category" data-category="خدمات"><span>🛠️</span> خدمات</button>
-        <button class="category" data-category="تسوق"><span>🛍️</span> تسوّق</button>
+      <div class="cards" id="places-grid">
+        <article class="place-card" data-category="restaurant">
+          <div class="place-cover cover-food"><span class="category-tag">مطعم شعبي</span><span class="place-emoji">🥙</span></div>
+          <div class="place-body"><div class="place-title"><h3>مطعم هاشم</h3><span class="area">وسط البلد</span></div><p>مطعم معروف للمأكولات الشعبية في عمّان. اسأل المطعم مباشرة عن القائمة والأسعار الحالية.</p><div class="place-actions"><a class="small-button phone" href="tel:+96265858101">📞 اتصال</a><a class="small-button whatsapp" href="https://wa.me/962778224069?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A5%D8%B6%D8%A7%D9%81%D8%A9%20%D8%B9%D8%B1%D8%B6%20%D9%84%D9%85%D8%B7%D8%B9%D9%85%D9%83%20%D8%B9%D9%84%D9%89%20%D8%AF%D8%A8%D9%91%D8%B1%D9%87%D8%A7%20%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86." target="_blank" rel="noopener">💬 واتساب المشروع</a></div></div>
+        </article>
+        <article class="place-card" data-category="restaurant">
+          <div class="place-cover cover-food"><span class="category-tag">مأكولات شرقية</span><span class="place-emoji">🍲</span></div>
+          <div class="place-body"><div class="place-title"><h3>مطاعم جبري</h3><span class="area">عمّان</span></div><p>مطاعم للمأكولات الشرقية. يُرجى التأكد من الفرع ومعلومات التواصل قبل الزيارة.</p><div class="place-actions"><a class="small-button phone" href="tel:+962795681700">📞 اتصال</a><a class="small-button whatsapp" href="https://wa.me/962778224069?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A5%D8%B6%D8%A7%D9%81%D8%A9%20%D8%B9%D8%B1%D8%B6%20لمحلي%20على%20دبّرها%20الأردن." target="_blank" rel="noopener">💬 واتساب المشروع</a><a class="small-button website" href="https://www.jabri.com.jo/" target="_blank" rel="noopener">🌐 الموقع</a></div></div>
+        </article>
+        <article class="place-card" data-category="cafe">
+          <div class="place-cover cover-cafe"><span class="category-tag">كافيه</span><span class="place-emoji">☕</span></div>
+          <div class="place-body"><div class="place-title"><h3>Rumi Café</h3><span class="area">جبل اللويبدة</span></div><p>كافيه في اللويبدة. اسأل عن ساعات العمل والقائمة الحالية قبل الزيارة.</p><div class="place-actions"><a class="small-button phone" href="tel:+96264644131">📞 اتصال</a><a class="small-button whatsapp" href="https://wa.me/962778224069?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A5%D8%B6%D8%A7%D9%81%D8%A9%20%D8%B9%D8%B1%D8%B6%20لمحلي%20على%20دبّرها%20الأردن." target="_blank" rel="noopener">💬 واتساب المشروع</a><a class="small-button website" href="https://www.rumijordan.com/" target="_blank" rel="noopener">🌐 الموقع</a></div></div>
+        </article>
+        <article class="place-card" data-category="cafe">
+          <div class="place-cover cover-cafe"><span class="category-tag">كافيه</span><span class="place-emoji">🧁</span></div>
+          <div class="place-body"><div class="place-title"><h3>Bahi Café</h3><span class="area">الشميساني</span></div><p>كافيه في الشميساني. تواصل معهم للتأكد من القائمة وساعات العمل.</p><div class="place-actions"><a class="small-button phone" href="tel:+96264654700">📞 اتصال</a><a class="small-button whatsapp" href="https://wa.me/962778224069?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A5%D8%B6%D8%A7%D9%81%D8%A9%20%D8%B9%D8%B1%D8%B6%20لمحلي%20على%20دبّرها%20الأردن." target="_blank" rel="noopener">💬 واتساب المشروع</a><a class="small-button website" href="https://www.bahijordan.com/" target="_blank" rel="noopener">🌐 الموقع</a></div></div>
+        </article>
       </div>
-      <div id="cards" class="cards" aria-live="polite"></div>
-      <div id="emptyState" class="empty hidden"><span>🔎</span><h3>ما لقينا نتائج</h3><p>جرّب كلمة ثانية أو غيّر المدينة والتصنيف.</p></div>
-      <p class="disclaimer">تنويه: هذه قائمة دليل عام لمعلومات تواصل منشورة علنًا، وليست شراكة أو إعلانًا مدفوعًا. لا توجد عروض مؤكدة حاليًا؛ تحقّق من المعلومات مع النشاط قبل الزيارة. زر واتساب يفتح رسالة جاهزة لتختار جهة الاتصال بنفسك، ولا يعني أن رقم النشاط مسجّل على واتساب.</p>
     </section>
 
-    <section class="business-section" id="business">
-      <div class="business-illustration" aria-hidden="true">📣</div>
-      <div class="business-copy"><span class="eyebrow light">لأصحاب المحلات والمشاريع</span><h2>خلّي الناس تعرفك.</h2><p>عندك محل أو خدمة بالأردن؟ جهّز طلب إضافة نشاطك إلى دليل دبّرها.</p></div>
-      <button id="ctaAddBtn" class="button button-white" type="button">أضف نشاطك <span>←</span></button>
+    <section class="add-section" id="add-listing">
+      <div><span class="eyebrow">أصحاب المحلات والمطاعم</span><h2>عندك عرض؟ خلّينا نعرّف الناس عليه.</h2><p>عبّي التفاصيل، ورح تفتح رسالة واتساب جاهزة لإرسالها لفريق دبّرها الأردن. نشر العرض مش تلقائي؛ بنراجعه ونتأكد من تفاصيله أولًا.</p><ul><li>✓ إرسال الطلب مجاني في مرحلة الإطلاق</li><li>✓ نراجع التفاصيل قبل نشر أي عرض</li><li>✓ لا نضمن عدد الزبائن أو المبيعات</li></ul></div>
+      <form id="listing-form" class="listing-form">
+        <label>اسم المحل أو المطعم<input name="business" required maxlength="100" placeholder="مثال: مطعم أبو أحمد"></label>
+        <label>المدينة أو المنطقة<input name="area" required maxlength="100" placeholder="مثال: عمّان - خلدا"></label>
+        <label>نوع النشاط<select name="type" required><option value="">اختر التصنيف</option><option>مطعم</option><option>كافيه</option><option>حلويات</option><option>ملابس</option><option>موبايلات وإلكترونيات</option><option>خدمات</option><option>غير ذلك</option></select></label>
+        <label>تفاصيل العرض<input name="offer" required maxlength="240" placeholder="مثال: خصم 10% حتى نهاية الأسبوع"></label>
+        <label>رقم التواصل مع المحل<input name="contact" required inputmode="tel" maxlength="30" placeholder="رقم هاتف المحل"></label>
+        <button class="button primary submit-button" type="submit">إرسال الطلب عبر واتساب ↗</button>
+        <p class="form-note">سيتم فتح واتساب على جهازك. راجع الرسالة واضغط إرسال بنفسك.</p>
+        <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
+      </form>
     </section>
+    <section class="section how" id="how"><span class="eyebrow">ببساطة</span><h2>كيف نعمل؟</h2><div class="how-grid"><div><b>١. اكتشف</b><p>تصفّح الأماكن الموجودة بالدليل.</p></div><div><b>٢. تواصل</b><p>اسأل النشاط مباشرة عن السعر والعرض.</p></div><div><b>٣. دبّرها</b><p>قارن الخيارات واختر الأنسب لميزانيتك.</p></div></div></section>
   </main>
-
-  <footer class="site-footer">
-    <a class="brand footer-brand" href="#"><span class="brand-icon">د</span><span class="brand-text"><strong>دبّرها</strong><small>الأردن</small></span></a>
-    <span>فكرة محلية، بتكبر فيك 🇯🇴</span><small>نسخة تجريبية أولى</small>
-  </footer>
-
-  <dialog id="listingDialog">
-    <form id="listingForm" method="dialog">
-      <div class="dialog-head"><div><span class="eyebrow">خلّي الناس تلاقيك</span><h2>طلب إضافة إعلان</h2></div><button class="close-btn" type="button" id="closeDialog" aria-label="إغلاق">×</button></div>
-      <p class="form-note">عبّي التفاصيل، ورح نجهّزلك رسالة تقدر تنسخها وترسلها. الطلب لا يُحفظ تلقائياً على الموقع حالياً.</p>
-      <label>اسم المحل أو الخدمة<input name="name" required maxlength="80" placeholder="مثلاً: مخبز الحارة"></label>
-      <div class="form-grid">
-        <label>نوع النشاط<select name="category" required><option value="عروض">عروض</option><option>مطاعم</option><option>كافيهات</option><option>خدمات</option><option>تسوق</option></select></label>
-        <label>المدينة<select name="city" required><option>عمّان</option><option>إربد</option><option>الزرقاء</option><option>العقبة</option><option>السلط</option><option>مادبا</option><option>جرش</option><option>الكرك</option></select></label>
-      </div>
-      <label>وصف مختصر<input name="description" required maxlength="160" placeholder="شو بتقدّم؟"></label>
-      <label>رقم واتساب أو هاتف (اختياري)<input name="phone" inputmode="tel" placeholder="07xxxxxxxx"></label>
-      <div class="dialog-actions"><button class="button button-primary" type="submit">جهّز رسالة الطلب</button><button class="button button-muted" type="button" id="cancelDialog">إلغاء</button></div>
-      <textarea id="generatedMessage" class="generated-message hidden" readonly aria-label="رسالة الطلب"></textarea>
-      <button id="copyMessage" class="button button-dark hidden" type="button">انسخ الرسالة</button>
-      <p id="formStatus" class="form-status" role="status"></p>
-    </form>
-  </dialog>
+  <footer><a class="brand footer-brand" href="#"><span class="brand-icon">د</span><span>دبّرها <b>الأردن</b></span></a><p>دليل محلي تجريبي — المعلومات والعروض تحتاج إلى التحقق من أصحاب الأنشطة.</p><small>© <span id="year"></span> دبّرها الأردن</small></footer>
   <script src="app.js"></script>
 </body>
 </html>

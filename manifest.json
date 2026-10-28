@@ -5,7 +5,6 @@
   "dir": "rtl",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#fbfaf6",
-  "theme_color": "#0f766e",
-  "description": "دليل تجريبي للعروض والخدمات المحلية في الأردن."
+  "background_color": "#f7fbf9",
+  "theme_color": "#0f766e"
 }
