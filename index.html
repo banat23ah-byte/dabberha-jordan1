@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>دبّرها الأردن | عروض وخدمات قريبة منك</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">د</span><div><strong>دبّرها</strong><small>الأردن</small></div></div>
+  <button id="addBtn" class="outline-btn" type="button">＋ أضف إعلانك</button>
+</header>
+<section class="hero">
+  <span class="eyebrow">وفّر وقتك ومصاريك 🇯🇴</span>
+  <h1>كل اللي بتدور عليه،<br><em>بمكان واحد.</em></h1>
+  <p>عروض، مطاعم، كافيهات وخدمات محلية في الأردن.</p>
+  <label class="searchbox"><span>⌕</span><input id="searchInput" type="search" placeholder="دوّر على مطعم، عرض أو خدمة..." aria-label="ابحث عن عروض وخدمات"></label>
+  <div class="location-row"><span>📍</span><label for="citySelect">المدينة:</label><select id="citySelect"><option value="الكل">كل الأردن</option><option>عمّان</option><option>إربد</option><option>الزرقاء</option><option>العقبة</option><option>السلط</option><option>مادبا</option><option>جرش</option><option>الكرك</option></select></div>
+</section>
+<main class="container">
+  <nav class="categories" aria-label="تصنيفات">
+    <button class="category active" data-category="الكل"><span>✨</span>الكل</button>
+    <button class="category" data-category="عروض"><span>🏷️</span>عروض</button>
+    <button class="category" data-category="مطاعم"><span>🍔</span>مطاعم</button>
+    <button class="category" data-category="كافيهات"><span>☕</span>كافيهات</button>
+    <button class="category" data-category="خدمات"><span>🛠️</span>خدمات</button>
+    <button class="category" data-category="تسوق"><span>🛍️</span>تسوق</button>
+  </nav>
+  <div class="section-heading"><div><span class="eyebrow">اكتشف محلياً</span><h2>أشياء ممكن تهمّك</h2></div><span id="resultsCount" class="count"></span></div>
+  <div id="cards" class="cards" aria-live="polite"></div>
+  <div id="emptyState" class="empty hidden"><span>🔎</span><h3>ما لقينا نتائج</h3><p>جرّب كلمة ثانية أو غيّر المدينة والتصنيف.</p></div>
+  <section class="business-cta"><div><span class="cta-icon">📣</span><h2>عندك محل أو خدمة؟</h2><p>اعرض نشاطك للناس في منطقتك. ابدأ بإرسال تفاصيل إعلانك.</p></div><button id="ctaAddBtn" class="primary-btn" type="button">أضف إعلاناً مجانياً</button></section>
+  <p class="disclaimer">هذه نسخة تجريبية. بعض الأمثلة المعروضة للتوضيح فقط وليست عروضاً مؤكدة. تحقّق من الأسعار والتفاصيل مع الجهة قبل الشراء.</p>
+</main>
+<footer><div class="brand"><span class="brand-mark">د</span><div><strong>دبّرها</strong><small>الأردن</small></div></div><span>فكرة محلية، بتكبر فيك 🇯🇴</span><small>نسخة تجريبية أولى</small></footer>
+
+<dialog id="listingDialog">
+  <form id="listingForm" method="dialog">
+    <div class="dialog-head"><div><span class="eyebrow">خلّي الناس تلاقيك</span><h2>طلب إضافة إعلان</h2></div><button class="close-btn" type="button" id="closeDialog" aria-label="إغلاق">×</button></div>
+    <p class="form-note">عبّي التفاصيل. رح يجهّز الموقع رسالة تقدر تبعتها إلنا أو تحفظها للتواصل لاحقاً.</p>
+    <label>اسم المحل أو الخدمة<input name="name" required maxlength="80" placeholder="مثلاً: مخبز الحارة"></label>
+    <div class="form-grid"><label>نوع النشاط<select name="category" required><option value="عروض">عروض</option><option>مطاعم</option><option>كافيهات</option><option>خدمات</option><option>تسوق</option></select></label>
+    <label>المدينة<select name="city" required><option>عمّان</option><option>إربد</option><option>الزرقاء</option><option>العقبة</option><option>السلط</option><option>مادبا</option><option>جرش</option><option>الكرك</option></select></label></div>
+    <label>وصف مختصر<input name="description" required maxlength="160" placeholder="شو بتقدّم؟"></label>
+    <label>رقم واتساب أو هاتف (اختياري)<input name="phone" inputmode="tel" placeholder="07xxxxxxxx"></label>
+    <div class="dialog-actions"><button class="primary-btn" type="submit">جهّز رسالة الطلب</button><button class="outline-btn" type="button" id="cancelDialog">إلغاء</button></div>
+    <p id="formStatus" class="form-status" role="status"></p>
+  </form>
+</dialog>
+<script src="app.js"></script>
+</body>
+</html>
