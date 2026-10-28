@@ -1,10 +1,8 @@
 const listings = [
-  {name:"لقمة طيبة",category:"مطاعم",city:"عمّان",description:"وجبات سريعة بطعم بيتي وخيارات مناسبة للغداء.",emoji:"🍔",cover:"cover-food",badge:"اختيار محلي",kind:"مطعم"},
-  {name:"بنّ وراحة",category:"كافيهات",city:"إربد",description:"قهوة مختصة وأجواء هادئة للدراسة واللقاءات.",emoji:"☕",cover:"cover-coffee",badge:"أجواء رايقة",kind:"كافيه"},
-  {name:"لمسة ستايل",category:"تسوق",city:"الزرقاء",description:"إكسسوارات وهدايا وأفكار لطيفة للمناسبات.",emoji:"🛍️",cover:"cover-shop",badge:"أفكار هدايا",kind:"متجر"},
-  {name:"صيانة بلمح البصر",category:"خدمات",city:"عمّان",description:"خدمات صيانة منزلية عامة — تواصل للتفاصيل.",emoji:"🛠️",cover:"cover-service",badge:"خدمات",kind:"خدمة"},
-  {name:"لقطة الأسبوع",category:"عروض",city:"العقبة",description:"مساحة لاكتشاف العروض المحلية المعلنة من أصحاب الأنشطة.",emoji:"🏷️",cover:"cover-deal",badge:"مثال توضيحي",kind:"عرض"},
-  {name:"سوق البلد",category:"تسوق",city:"السلط",description:"منتجات محلية وأغراض يومية من مشاريع صغيرة.",emoji:"🧺",cover:"cover-market",badge:"مشروع محلي",kind:"متجر"}
+  {name:"مطعم هاشم",category:"مطاعم",city:"عمّان",description:"مطعم شعبي معروف في وسط البلد. اتصل للتأكد من التفاصيل قبل الزيارة.",emoji:"🧆",cover:"cover-food",badge:"معلومات دليل عام",kind:"مطعم",phone:"+96265858101",website:"https://www.facebook.com/Hashem.Rest.Jo",address:"شارع الملك فيصل، وسط البلد"},
+  {name:"مطاعم جبري",category:"مطاعم",city:"عمّان",description:"مطاعم تقدم مأكولات أردنية وشرقية. الفروع وساعات العمل قد تختلف.",emoji:"🍽️",cover:"cover-food",badge:"معلومات دليل عام",kind:"مطعم",phone:"+96265681700",website:"https://www.jabri.com.jo/",address:"شارع وصفي التل، عمّان"},
+  {name:"Rumi Café",category:"كافيهات",city:"عمّان",description:"كافيه في جبل اللويبدة يقدم القهوة والشاي وأصنافًا خفيفة.",emoji:"☕",cover:"cover-coffee",badge:"معلومات دليل عام",kind:"كافيه",phone:"+96264644131",website:"https://www.rumijordan.com/",address:"شارع كلية الشريعة 14، جبل اللويبدة"},
+  {name:"Bahi Café",category:"كافيهات",city:"عمّان",description:"كافيه في الشميساني بأجواء مستوحاة من عمّان القديمة.",emoji:"🫖",cover:"cover-coffee",badge:"معلومات دليل عام",kind:"كافيه",phone:"+96264654700",website:"https://www.bahijordan.com/",address:"الشميساني، عمّان"}
 ];
 const cards = document.getElementById("cards");
 const emptyState = document.getElementById("emptyState");
@@ -31,7 +29,13 @@ function renderCards() {
         <div class="card-meta"><span class="category-label">${item.category}</span><span>${item.kind}</span></div>
         <h3>${escapeHTML(item.name)}</h3>
         <p>${escapeHTML(item.description)}</p>
-        <div class="card-bottom"><span class="card-city">📍 ${item.city}</span><button class="card-link" type="button" data-details="${escapeHTML(item.name)}">التفاصيل ←</button></div>
+        <p class="business-address">📍 ${escapeHTML(item.address)}</p>
+        <div class="contact-actions">
+          <a class="contact-button call-button" href="tel:${item.phone}" aria-label="اتصل بـ ${escapeHTML(item.name)}">☎ اتصال</a>
+          <a class="contact-button whatsapp-button" href="https://wa.me/?text=${encodeURIComponent(`مرحبًا، أريد الاستفسار عن ${item.name}.`) }" target="_blank" rel="noopener noreferrer" aria-label="افتح واتساب للتواصل بشأن ${escapeHTML(item.name)}">☏ واتساب</a>
+          <a class="contact-button site-button" href="${item.website}" target="_blank" rel="noopener noreferrer">الموقع/الصفحة ↗</a>
+        </div>
+        <div class="card-bottom"><span class="card-city">📍 ${item.city}</span><span class="card-link">دليل عام</span></div>
       </div>
     </article>`).join("");
   count.textContent = `${filtered.length} نتائج`;
@@ -77,11 +81,5 @@ copyButton.addEventListener("click", async () => {
     document.execCommand("copy");
     status.textContent = "حددنا الرسالة للنسخ؛ اضغط Ctrl+C إذا لزم الأمر.";
   }
-});
-cards.addEventListener("click", event => {
-  const button = event.target.closest("[data-details]");
-  if (!button) return;
-  const item = listings.find(entry => entry.name === button.dataset.details);
-  if (item) alert(`${item.name}\n${item.category} · ${item.city}\n\n${item.description}\n\nتنبيه: هذا مثال تجريبي، وليس إعلاناً مؤكداً.`);
 });
 renderCards();
