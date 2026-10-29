@@ -630,7 +630,6 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
           }
         });
 
-       ```
     const editButton = document.createElement("button");
     editButton.type = "button";
     editButton.textContent = "تعديل";
@@ -696,7 +695,7 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
           clearPreview();
           saveButton.textContent = "حفظ العرض";
         }
-ب
+
         showMessage("تم حذف العرض نهائيًا.");
         await loadOffers();
       } catch (error) {
