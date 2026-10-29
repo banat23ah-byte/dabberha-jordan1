@@ -183,6 +183,60 @@
 
       <h2>العروض المحفوظة</h2>
       <div id="offers-list">جارٍ تحميل العروض...</div>
+      <h2>إدارة الأماكن</h2>
+
+<form id="place-form">
+  <label for="place-name">اسم المكان</label>
+  <input id="place-name" required maxlength="120">
+
+  <label for="place-category">نوع المكان</label>
+  <select id="place-category" required>
+    <option value="restaurant">مطعم</option>
+    <option value="cafe">كافيه</option>
+    <option value="supermarket">سوبرماركت</option>
+  </select>
+
+  <label for="place-governorate">المحافظة</label>
+  <select id="place-governorate" required>
+    <option value="عمّان">عمّان</option>
+    <option value="إربد">إربد</option>
+    <option value="الزرقاء">الزرقاء</option>
+    <option value="البلقاء">البلقاء</option>
+    <option value="مادبا">مادبا</option>
+    <option value="الكرك">الكرك</option>
+    <option value="الطفيلة">الطفيلة</option>
+    <option value="معان">معان</option>
+    <option value="العقبة">العقبة</option>
+    <option value="جرش">جرش</option>
+    <option value="عجلون">عجلون</option>
+    <option value="المفرق">المفرق</option>
+  </select>
+
+  <label for="place-city">المدينة أو المنطقة</label>
+  <input id="place-city" required maxlength="120">
+
+  <label for="place-address">العنوان التفصيلي (اختياري)</label>
+  <input id="place-address" maxlength="250">
+
+  <label for="place-phone">رقم الهاتف (اختياري)</label>
+  <input id="place-phone" type="tel">
+
+  <label for="place-maps">رابط خرائط Google (اختياري)</label>
+  <input id="place-maps" type="url">
+
+  <label for="place-description">وصف المكان (اختياري)</label>
+  <textarea id="place-description" rows="3"></textarea>
+
+  <label>
+    <input id="place-published" type="checkbox">
+    نشر المكان على الموقع مباشرة
+  </label>
+
+  <button type="submit">حفظ المكان</button>
+</form>
+
+<h2>الأماكن المحفوظة</h2>
+<div id="places-list">الأماكن ستظهر هنا.</div>
     </section>
 
     <p id="message" role="status" aria-live="polite"></p>
@@ -289,7 +343,7 @@ let currentImageUrl = null;
       showLoggedIn(Boolean(session));
 
       if (session) {
-        await loadOffers();
+      await loadAdminData();
       }
     }
 
@@ -684,6 +738,144 @@ let currentImageUrl = null;
       showLoggedIn(Boolean(session));
     });
 
+   const placeForm = document.getElementById("place-form");
+const placesList = document.getElementById("places-list");
+
+async function loadPlaces() {
+  placesList.textContent = "جارٍ تحميل الأماكن...";
+
+  const { data, error } = await supabase
+    .from("places")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Load places error:", error);
+    placesList.textContent = "تعذّر تحميل الأماكن.";
+    return;
+  }
+
+  placesList.replaceChildren();
+
+  if (!data || data.length === 0) {
+    placesList.textContent = "لسه ما أضفت أي أماكن.";
+    return;
+  }
+
+  data.forEach((place) => {
+    const card = document.createElement("article");
+    card.className = "offer";
+
+    const heading = document.createElement("strong");
+    heading.textContent = place.name;
+
+    const details = document.createElement("p");
+    details.textContent =
+      place.category + " — " +
+      place.governorate + " — " +
+      place.city + " — " +
+      (place.is_published ? "منشور" : "غير منشور");
+
+    const publishButton = document.createElement("button");
+    publishButton.type = "button";
+    publishButton.textContent = place.is_published
+      ? "إخفاء المكان"
+      : "نشر المكان";
+
+    publishButton.addEventListener("click", async () => {
+      publishButton.disabled = true;
+
+      const { error } = await supabase
+        .from("places")
+        .update({ is_published: !place.is_published })
+        .eq("id", place.id);
+
+      publishButton.disabled = false;
+
+      if (error) {
+        console.error(error);
+        showMessage("تعذّر تغيير حالة نشر المكان.", true);
+        return;
+      }
+
+      showMessage("تم تحديث المكان.");
+      await loadPlaces();
+    });
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.textContent = "حذف المكان";
+
+    deleteButton.addEventListener("click", async () => {
+      if (!confirm("هل تريد حذف هذا المكان نهائيًا؟")) return;
+
+      deleteButton.disabled = true;
+
+      const { error } = await supabase
+        .from("places")
+        .delete()
+        .eq("id", place.id);
+
+      if (error) {
+        console.error(error);
+        showMessage("تعذّر حذف المكان.", true);
+        deleteButton.disabled = false;
+        return;
+      }
+
+      showMessage("تم حذف المكان.");
+      await loadPlaces();
+    });
+
+    card.append(heading, details, publishButton, deleteButton);
+    placesList.append(card);
+  });
+}
+
+placeForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const submitButton = placeForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  showMessage("جارٍ حفظ المكان...");
+
+  try {
+    const place = {
+      name: document.getElementById("place-name").value.trim(),
+      category: document.getElementById("place-category").value,
+      governorate: document.getElementById("place-governorate").value,
+      city: document.getElementById("place-city").value.trim(),
+      address: document.getElementById("place-address").value.trim() || null,
+      phone: document.getElementById("place-phone").value.trim() || null,
+      maps_url: document.getElementById("place-maps").value.trim() || null,
+      description: document.getElementById("place-description").value.trim() || null,
+      is_published: document.getElementById("place-published").checked
+    };
+
+    const { error } = await supabase
+      .from("places")
+      .insert(place);
+
+    if (error) {
+      console.error("Save place error:", error);
+      showMessage("تعذّر حفظ المكان. راجع الخطأ في أدوات المطوّر.", true);
+      return;
+    }
+
+    placeForm.reset();
+    showMessage("تم حفظ المكان بنجاح.");
+    await loadPlaces();
+  } catch (error) {
+    console.error(error);
+    showMessage("حدث خطأ أثناء حفظ المكان.", true);
+  } finally {
+    submitButton.disabled = false;
+  }
+});
+
+async function loadAdminData() {
+  await Promise.all([loadOffers(), loadPlaces()]);
+} 
     refreshSession();
   </script>
 </body>
