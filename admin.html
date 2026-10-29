@@ -380,7 +380,8 @@ let currentImageUrl = null;
         }
 
         const file = imageFileInput.files[0];
-let imageUrl = editingOfferId !== null ? currentImageUrl : null;
+        let imageUrl = null;
+
         if (file) {
           const allowedTypes = [
             "image/jpeg",
@@ -470,43 +471,11 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
             document.getElementById("published").checked
         };
 
-      ```javascript
-        let saveError = null;
+        showMessage("جارٍ حفظ العرض في قاعدة البيانات...");
 
-        if (editingOfferId !== null) {
-          const { error } = await supabase
-            .from("offers")
-            .update(offer)
-            .eq("id", editingOfferId);
-
-          saveError = error;
-        } else {
-          const { error } = await supabase
-            .from("offers")
-            .insert(offer);
-
-          saveError = error;
-        }
-
-        if (saveError) {
-          console.error("Offer save error:", saveError);
-
-          if (uploadedFilePath) {
-            const { error: cleanupError } = await supabase
-              .storage
-              .from("offer-images")
-              .remove([uploadedFilePath]);
-
-            if (cleanupError) {
-              console.error("Image cleanup error:", cleanupError);
-            }
-          }
-
-          showMessage("تعذّر حفظ العرض. تحقق من الصلاحيات.", true);
-          return;
-        }
-```
-
+        const { error: insertError } = await supabase
+          .from("offers")
+          .insert(offer);
 
         if (insertError) {
           console.error("Offer insert error:", insertError);
@@ -532,17 +501,11 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
           return;
         }
 
-      ```
-    form.reset();
-    clearPreview();
-    editingOfferId = null;
-    currentImageUrl = null;
-    saveButton.textContent = "حفظ العرض";
+        form.reset();
+        clearPreview();
 
-    showMessage("تم حفظ العرض بنجاح.");
-    await loadOffers();
-```
-
+        showMessage("تم حفظ العرض بنجاح.");
+        await loadOffers();
 
       } catch (error) {
         console.error("Save error:", error);
@@ -563,8 +526,7 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
       const { data, error } = await supabase
         .from("offers")
         .select(
-         "*"
-
+          "id, shop_name, title, price, is_published, created_at"
         )
         .order("created_at", { ascending: false });
 
@@ -630,87 +592,8 @@ let imageUrl = editingOfferId !== null ? currentImageUrl : null;
           }
         });
 
-    const editButton = document.createElement("button");
-    editButton.type = "button";
-    editButton.textContent = "تعديل";
-
-    editButton.addEventListener("click", () => {
-      editingOfferId = offer.id;
-      currentImageUrl = offer.image_url || null;
-
-      document.getElementById("shop-name").value = offer.shop_name || "";
-      document.getElementById("title").value = offer.title || "";
-      document.getElementById("description").value = offer.description || "";
-      document.getElementById("price").value = offer.price ?? "";
-      document.getElementById("category").value = offer.category || "";
-      document.getElementById("whatsapp").value = offer.whatsapp || "";
-      document.getElementById("published").checked = offer.is_published;
-
-      document.getElementById("image-file").value = "";
-      clearPreview();
-
-      if (currentImageUrl) {
-        const preview = document.getElementById("image-preview");
-        preview.src = currentImageUrl;
-        preview.hidden = false;
-      }
-
-      saveButton.textContent = "حفظ التعديلات";
-      showMessage("عدّل البيانات المطلوبة، ثم اضغط حفظ التعديلات.");
-      document.getElementById("offer-form").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    });
-
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.textContent = "حذف نهائي";
-
-    deleteButton.addEventListener("click", async () => {
-      const confirmed = confirm(
-        "هل أنت متأكد من حذف هذا العرض نهائيًا؟ لا يمكن التراجع عن الحذف."
-      );
-
-      if (!confirmed) return;
-
-      deleteButton.disabled = true;
-
-      try {
-        const { error } = await supabase
-          .from("offers")
-          .delete()
-          .eq("id", offer.id);
-
-        if (error) {
-          console.error("Delete offer error:", error);
-          showMessage("تعذّر حذف العرض. تحقق من الصلاحيات.", true);
-          return;
-        }
-
-        if (editingOfferId === offer.id) {
-          editingOfferId = null;
-          currentImageUrl = null;
-          document.getElementById("offer-form").reset();
-          clearPreview();
-          saveButton.textContent = "حفظ العرض";
-        }
-
-        showMessage("تم حذف العرض نهائيًا.");
-        await loadOffers();
-      } catch (error) {
-        console.error(error);
-        showMessage("حدث خطأ أثناء حذف العرض.", true);
-      } finally {
-        deleteButton.disabled = false;
-      }
-    });
-
-    card.append(heading, details, button, editButton, deleteButton);
-    offersList.append(card);
-```
-
-     
+        card.append(heading, details, button);
+        offersList.append(card);
       });
     }
 
