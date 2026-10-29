@@ -35,7 +35,7 @@ if (form) {
     window.open(url, "_blank", "noopener,noreferrer");
   });
 }
-```javascript
+
 // جلب العروض المنشورة من قاعدة بيانات Supabase
 (async function loadPublishedOffers() {
   const SUPABASE_URL = "https://vrfehbzrufemcpntscmh.supabase.co";
@@ -137,4 +137,4 @@ if (form) {
     console.error("حدث خطأ أثناء تحميل العروض:", error);
   }
 })();
-```
+
