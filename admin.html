@@ -1,0 +1,283 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة دبّرها الأردن</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      box-shadow: 0 3px 15px #0001;
+    }
+    h1 { color: #16794b; text-align: center; }
+    label { display: block; margin-top: 14px; font-weight: bold; }
+    input, textarea, select, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      background: #16794b;
+      color: white;
+      border: 0;
+      cursor: pointer;
+      margin-top: 18px;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    #message { margin-top: 15px; line-height: 1.7; }
+    .hidden { display: none; }
+    .offer {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+    }
+    .offer button { margin-top: 8px; }
+    .logout { background: #555; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>إدارة دبّرها الأردن</h1>
+    <p>سجّل دخولك لإضافة العروض وإدارتها.</p>
+
+    <section id="login-section">
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" autocomplete="username" required>
+
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+
+      <button id="login-button">تسجيل الدخول</button>
+    </section>
+
+    <section id="admin-section" class="hidden">
+      <button id="logout-button" class="logout">تسجيل الخروج</button>
+      <h2>إضافة عرض جديد</h2>
+
+      <form id="offer-form">
+        <label for="shop-name">اسم المحل</label>
+        <input id="shop-name" required maxlength="120">
+
+        <label for="title">عنوان العرض</label>
+        <input id="title" required maxlength="160">
+
+        <label for="description">تفاصيل العرض</label>
+        <textarea id="description" rows="3"></textarea>
+
+        <label for="price">السعر (اختياري)</label>
+        <input id="price" type="number" min="0" step="0.01">
+
+        <label for="category">التصنيف</label>
+        <select id="category">
+          <option value="restaurant">مطاعم</option>
+          <option value="cafe">قهوة وكافيهات</option>
+          <option value="shopping">تسوّق</option>
+          <option value="services">خدمات</option>
+          <option value="other">أخرى</option>
+        </select>
+
+        <label for="image">رابط صورة العرض (اختياري حاليًا)</label>
+        <input id="image" type="url" placeholder="https://...">
+
+        <label for="whatsapp">رقم واتساب المحل (اختياري)</label>
+        <input id="whatsapp" type="tel" placeholder="9627XXXXXXXX">
+
+        <label>
+          <input id="published" type="checkbox" style="width:auto">
+          نشر العرض على الموقع مباشرة
+        </label>
+
+        <button id="save-button" type="submit">حفظ العرض</button>
+      </form>
+
+      <h2>العروض المحفوظة</h2>
+      <div id="offers-list">جارٍ تحميل العروض...</div>
+    </section>
+
+    <p id="message" role="status" aria-live="polite"></p>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://vrfehbzrufemcpntscmh.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_P8jsDN1OuoZyvOM4bvDzpA_hRDcS9Sf";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+    const loginSection = document.getElementById("login-section");
+    const adminSection = document.getElementById("admin-section");
+    const message = document.getElementById("message");
+    const form = document.getElementById("offer-form");
+    const offersList = document.getElementById("offers-list");
+    const saveButton = document.getElementById("save-button");
+
+    function showMessage(text, isError = false) {
+      message.textContent = text;
+      message.style.color = isError ? "#b42318" : "#16794b";
+    }
+
+    function showLoggedIn(isLoggedIn) {
+      loginSection.classList.toggle("hidden", isLoggedIn);
+      adminSection.classList.toggle("hidden", !isLoggedIn);
+    }
+
+    async function refreshSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        showMessage("تعذّر التحقق من تسجيل الدخول.", true);
+        return;
+      }
+
+      const session = data.session;
+      showLoggedIn(Boolean(session));
+
+      if (session) {
+        await loadOffers();
+      }
+    }
+
+    document.getElementById("login-button").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        showMessage("اكتب البريد الإلكتروني وكلمة المرور.", true);
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        showMessage("تعذّر تسجيل الدخول. تأكد من البريد وكلمة المرور.", true);
+        return;
+      }
+
+      showMessage("تم تسجيل الدخول.");
+      await refreshSession();
+    });
+
+    document.getElementById("logout-button").addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      showLoggedIn(false);
+      showMessage("تم تسجيل الخروج.");
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      saveButton.disabled = true;
+      showMessage("جارٍ حفظ العرض...");
+
+      const priceText = document.getElementById("price").value.trim();
+      const price = priceText === "" ? null : Number(priceText);
+
+      const offer = {
+        shop_name: document.getElementById("shop-name").value.trim(),
+        title: document.getElementById("title").value.trim(),
+        description: document.getElementById("description").value.trim() || null,
+        price,
+        category: document.getElementById("category").value,
+        image_url: document.getElementById("image").value.trim() || null,
+        whatsapp: document.getElementById("whatsapp").value.trim() || null,
+        is_published: document.getElementById("published").checked
+      };
+
+      const { error } = await supabase.from("offers").insert(offer);
+
+      saveButton.disabled = false;
+
+      if (error) {
+        showMessage("ما قدرنا نحفظ العرض. تأكد من تسجيل الدخول وإعدادات Supabase.", true);
+        return;
+      }
+
+      form.reset();
+      showMessage("تم حفظ العرض بنجاح.");
+      await loadOffers();
+    });
+
+    async function loadOffers() {
+      offersList.textContent = "جارٍ تحميل العروض...";
+
+      const { data, error } = await supabase
+        .from("offers")
+        .select("id, shop_name, title, price, is_published, created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        offersList.textContent = "تعذّر تحميل العروض.";
+        showMessage("تحقق من صلاحيات جدول offers في Supabase.", true);
+        return;
+      }
+
+      offersList.replaceChildren();
+
+      if (!data.length) {
+        offersList.textContent = "لسه ما أضفت أي عروض.";
+        return;
+      }
+
+      data.forEach((offer) => {
+        const card = document.createElement("article");
+        card.className = "offer";
+
+        const heading = document.createElement("strong");
+        heading.textContent = offer.title;
+
+        const details = document.createElement("p");
+        details.textContent =
+          offer.shop_name +
+          (offer.price !== null ? " — السعر: " + offer.price : "") +
+          (offer.is_published ? " — منشور" : " — مسودة");
+
+        const button = document.createElement("button");
+        button.textContent = offer.is_published ? "إخفاء العرض" : "نشر العرض";
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          const { error } = await supabase
+            .from("offers")
+            .update({ is_published: !offer.is_published })
+            .eq("id", offer.id);
+
+          if (error) {
+            showMessage("تعذّر تغيير حالة النشر.", true);
+          } else {
+            showMessage("تم تحديث العرض.");
+            await loadOffers();
+          }
+        });
+
+        card.append(heading, details, button);
+        offersList.append(card);
+      });
+    }
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      showLoggedIn(Boolean(session));
+    });
+
+    refreshSession();
+  </script>
+</body>
+</html>
+```
