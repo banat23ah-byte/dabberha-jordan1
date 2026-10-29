@@ -591,8 +591,91 @@ let currentImageUrl = null;
             button.disabled = false;
           }
         });
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.textContent = "تعديل";
 
-        card.append(heading, details, button);
+        editButton.addEventListener("click", async () => {
+          const newTitle = prompt("اكتب اسم العرض الجديد:", offer.title);
+          if (newTitle === null || !newTitle.trim()) return;
+
+          const newShop = prompt("اكتب اسم المحل:", offer.shop_name);
+          if (newShop === null || !newShop.trim()) return;
+
+          const newPrice = prompt("اكتب السعر:", offer.price ?? "");
+          if (newPrice === null) return;
+
+          let price = null;
+          if (newPrice.trim() !== "") {
+            price = Number(newPrice);
+            if (!Number.isFinite(price) || price < 0) {
+              alert("السعر غير صحيح.");
+              return;
+            }
+          }
+
+          editButton.disabled = true;
+
+          try {
+            const { error } = await supabase
+              .from("offers")
+              .update({
+                title: newTitle.trim(),
+                shop_name: newShop.trim(),
+                price: price
+              })
+              .eq("id", offer.id);
+
+            if (error) {
+              console.error(error);
+              showMessage("تعذّر تعديل العرض.", true);
+              return;
+            }
+
+            showMessage("تم تعديل العرض.");
+            await loadOffers();
+          } catch (error) {
+            console.error(error);
+            showMessage("حدث خطأ أثناء تعديل العرض.", true);
+          } finally {
+            editButton.disabled = false;
+          }
+        });
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.textContent = "حذف نهائي";
+
+        deleteButton.addEventListener("click", async () => {
+          const confirmed = confirm(
+            "هل أنت متأكد من حذف العرض نهائيًا؟ لا يمكن التراجع عن الحذف."
+          );
+
+          if (!confirmed) return;
+
+          deleteButton.disabled = true;
+
+          try {
+            const { error } = await supabase
+              .from("offers")
+              .delete()
+              .eq("id", offer.id);
+
+            if (error) {
+              console.error(error);
+              showMessage("تعذّر حذف العرض.", true);
+              return;
+            }
+
+            showMessage("تم حذف العرض نهائيًا.");
+            await loadOffers();
+          } catch (error) {
+            console.error(error);
+            showMessage("حدث خطأ أثناء حذف العرض.", true);
+          } finally {
+            deleteButton.disabled = false;
+          }
+        });
+        card.append(heading, details, button, editButton, deleteButton);
         offersList.append(card);
       });
     }
